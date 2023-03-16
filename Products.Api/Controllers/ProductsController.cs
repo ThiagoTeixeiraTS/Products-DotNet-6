@@ -24,7 +24,6 @@ namespace Products.Api.Controllers
 
         [HttpPost]
         [Route("/products")]
-
         public async Task<ActionResult> CreateProduct(Product product)
         {
              await _context.Products.AddAsync(product); 
