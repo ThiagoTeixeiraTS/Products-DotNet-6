@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Products.Api.Data;
 using Products.Api.Models;
@@ -8,6 +9,7 @@ namespace Products.Api.Controllers
     [Route ("api/[controller]")]
     [ApiController]
 
+
     public class ProductsController : ControllerBase
     {
         private readonly ProductsContext _context;
@@ -15,8 +17,10 @@ namespace Products.Api.Controllers
         {
             _context= context;
         }
+
         [HttpGet]
         [Route("/products")]
+
         public async Task<ActionResult> GetProducts()
         {
             return Ok(await _context.Products.ToListAsync());
@@ -24,6 +28,7 @@ namespace Products.Api.Controllers
 
         [HttpPost]
         [Route("/products")]
+        [Authorize]
         public async Task<ActionResult> CreateProduct(Product product)
         {
              await _context.Products.AddAsync(product); 
@@ -34,6 +39,7 @@ namespace Products.Api.Controllers
 
         [HttpPut]
         [Route("/products")]
+        [Authorize]
         public async Task<ActionResult> UpdateProduct(Product product) 
         {
             var dbProduct = await _context.Products.FindAsync(product.Id);
@@ -67,6 +73,7 @@ namespace Products.Api.Controllers
 
         [HttpGet]
         [Route("/productsById")]
+        [Authorize]
         public async Task<ActionResult> GetProductById(Guid id)
         {
             var dbProduct = await _context.Products.FindAsync(id);
